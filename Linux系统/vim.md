@@ -1,0 +1,201 @@
+# vi的特点
+
+几乎每一个NIX系统都预安装
+
+非常快，尤其是对于大文件
+
+不需要GUI
+
+不需要鼠标
+
+可扩展
+
+# 模式
+
+insert mode    在光标位置插入文本
+
+normal mode  做另外两个模式做不了的事
+
+visual mode    标记和选择文本
+
+ESC                   总是返回normal mode
+
+# 退出
+
+:q  
+
+:q!
+
+# 打开
+
+vim file.txt
+
+# 基础命令
+
+i
+
+a
+
+shift + i
+
+shift + a
+
+x
+
+dd
+
+# 移动
+
+k  上
+
+j  下
+
+h 左
+
+l  右
+
+w 下一个单词的开头
+
+b 上一个单词的开头
+
+e  下一个单词的结尾
+
+ge 上一个单词结尾
+
+$  当前行末尾
+
+^  当前行开头
+
+gg  第一行
+
+G  最后一行
+
+# 文件管理
+
+:w                写入文件
+
+:w file.txt   以文件名写入文件
+
+:e file.txt    在同一个窗口打开文件，同时编辑
+
+:r file.txt    读取另一个文件并续在当前文件后面
+
+:!ls              :!运行外部指令
+
+:r!ls            将外部指令的输出复制到当前文件中
+
+# 查找和替换
+
+/  前向查找
+
+?  后向查找
+
+n  下一个搜索结果
+
+N  上一个搜索结果
+
+\* 前向搜索光标所在的单词，要求完全匹配
+
+g* 前向搜索光标所在的单词， 可以部分匹配
+
+\#  后向搜索光标所在的单词
+
+:\<range> s/\<search_string>/\<replace_string>/\<modifier>
+
+range:  定义替换范围
+
+​	%  整个文件
+
+​	<start_line>, <end_line>  特定数行之中，如 15,25
+
+modifier：定义替换行为
+
+​	g    全局替换
+
+​	gc  每次替换前要求确认      y/n/a/q/l/ctrl+E/ctrl+Y    确认/拒绝/替换所有/退出/替换完这次后退出/向上滚动屏幕/向下滚动屏幕
+
+​	gn  不替换，只高亮查找后的结果
+
+# 复制和粘贴
+
+dd  贴切当前行
+
+p  粘贴当前行到光标后
+
+P  粘贴当前行到光标前
+
+yy   复制当前行
+
+2yy 复制之后2行
+
+y2+  复制之后2行
+
+:reg  显示剪贴板
+
+"ay  将文本复制进剪贴板a
+
+"ap  粘贴剪贴板a的文本
+
+# Visual mode
+
+v         开启visual mode模式，用命令或者ESC退出
+
+V         按行选择的Visual模式
+
+ctrl+v 按块选择的Visual模式
+
+ctrl+f  向后翻页
+
+ctrl+b 向前翻页
+
+# buffer
+
+:ls!       显示已经打开的文件列表
+
+:b        用名字，数字或regex切换到其他文件
+
+:badd 打开一个新文件
+
+:bdel   关闭一个文件
+
+# windows
+
+:new 或 ctrl+w s 打开或新建一个文件，并以水平分割的窗口显示
+
+:vnew                   打开或新建一个文件，并以竖直分割的窗口显示
+
+ctrl+w mov          以mov方向移动到其他窗口
+
+10 ctrl+w +          增加窗口垂直方向的大小10，10 ctrl+w - 减少
+
+10 ctrl+w <		  增加窗口水平方向的大小10，10 ctrl+w > 减少
+
+ctrl+w =                重置至每个窗口相同大小
+
+ctrl+w _                最大化该窗口宽度，ctrl+w | 最大化高度
+
+ctrl+w o               关闭除当前窗口外的其他窗口
+
+ctrl+w c               关闭当前窗口
+
+# tabs
+
+:tabedit    在新tab中打开一个新文件
+
+:tabclose  关闭当前tab
+
+:tabonly   关闭除当前tab外的其他tab
+
+gt              下一个tab
+
+gT              上一个tab
+
+# macros
+
+q[a-z] 录制宏命令
+
+@[a-z] 执行宏命令
+
+10@b b宏命令执行10次
+
+:reg [a-z] 查看宏命令内容
