@@ -4,42 +4,45 @@ from pyautogui import click as Click
 from time import sleep
 
 # mouse = Controller()
-# while 1:u
+# while 1:
 #     print(mouse.position)
 
-# firstRow_Y = 899
-# secondRow_Y = 956
-# Position = {
-#     '-300': (1364, firstRow_Y),
-#     '-30': (1433, firstRow_Y),
-#     '-5': (1492, firstRow_Y),
-#     '-1': (1550, firstRow_Y),
-#     '+1': (1615, firstRow_Y),
-#     '+5': (1669, firstRow_Y),
-#     '+30': (1737, firstRow_Y),
-#     '+300': (1832, firstRow_Y),
-#     'pre': (1447, secondRow_Y),
-#     'start': (1538, secondRow_Y),
-#     'end': (1653, secondRow_Y),
-#     'next': (1736, secondRow_Y)
-# }
-
-firstRow_Y = 916
-secondRow_Y = 971
+# that's for little monitor
+firstRow_Y = 899
+secondRow_Y = 956
 Position = {
-    '-300': (966, firstRow_Y),
-    '-30': (1034, firstRow_Y),
-    '-5': (1095, firstRow_Y),
-    '-1': (1152, firstRow_Y),
-    '+1': (1212, firstRow_Y),
-    '+5': (1274, firstRow_Y),
-    '+30': (1339, firstRow_Y),
-    '+300': (1416, firstRow_Y),
-    'pre': (1047, secondRow_Y),
-    'start': (1133, secondRow_Y),
-    'end': (1253, secondRow_Y),
-    'next': (1335, secondRow_Y)
+    '-300': (1364, firstRow_Y),
+    '-30': (1433, firstRow_Y),
+    '-5': (1492, firstRow_Y),
+    '-1': (1550, firstRow_Y),
+    '+1': (1615, firstRow_Y),
+    '+5': (1669, firstRow_Y),
+    '+30': (1737, firstRow_Y),
+    '+300': (1832, firstRow_Y),
+    'pre': (1447, secondRow_Y),
+    'start': (1538, secondRow_Y),
+    'end': (1653, secondRow_Y),
+    'next': (1736, secondRow_Y)
 }
+
+
+# that's for company big LG monitor
+# firstRow_Y = 916
+# secondRow_Y = 971
+# Position = {
+#     '-300': (966, firstRow_Y),
+#     '-30': (1034, firstRow_Y),
+#     '-5': (1095, firstRow_Y),
+#     '-1': (1152, firstRow_Y),
+#     '+1': (1212, firstRow_Y),
+#     '+5': (1274, firstRow_Y),
+#     '+30': (1339, firstRow_Y),
+#     '+300': (1416, firstRow_Y),
+#     'pre': (1047, secondRow_Y),
+#     'start': (1133, secondRow_Y),
+#     'end': (1253, secondRow_Y),
+#     'next': (1335, secondRow_Y)
+# }
 
 
 time_interval = 0.05
