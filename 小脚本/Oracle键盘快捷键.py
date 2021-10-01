@@ -41,6 +41,7 @@ Position = {
     'next': (1335, secondRow_Y)
 }
 
+
 time_interval = 0.05
 
 
