@@ -712,3 +712,781 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
+# 标准输入对话框
+
+```python
+from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel, QInputDialog, QTextBrowser)
+import sys
+class Example(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setGeometry(500,500,500,550)
+        self.setWindowTitle('关注微信公众号：学点编程吧--标准输入对话框')
+
+        self.lb1 = QLabel('姓名：',self)
+        self.lb1.move(20,20)
+        self.lb2 = QLabel('年龄：',self)
+        self.lb2.move(20,80)
+        self.lb3 = QLabel('性别：',self)
+        self.lb3.move(20,140)
+        self.lb4 = QLabel('身高（cm）：',self)
+        self.lb4.move(20,200)
+        self.lb5 = QLabel('基本信息：',self)
+        self.lb5.move(20,260)
+        self.lb6 = QLabel('学点编程',self)
+        self.lb6.move(80,20)
+        self.lb7 = QLabel('18',self)
+        self.lb7.move(80,80)
+        self.lb8 = QLabel('男',self)
+        self.lb8.move(80,140)
+        self.lb9 = QLabel('175',self)
+        self.lb9.move(120,200)
+
+        self.tb = QTextBrowser(self)  # 一个大的文本框，用于显示文本
+        self.tb.move(20,320)
+
+        self.bt1 = QPushButton('修改姓名',self)
+        self.bt1.move(200,20)
+        self.bt2 = QPushButton('修改年龄',self)
+        self.bt2.move(200,80)        
+        self.bt3 = QPushButton('修改性别',self)
+        self.bt3.move(200,140)        
+        self.bt4 = QPushButton('修改身高',self)
+        self.bt4.move(200,200)        
+        self.bt5 = QPushButton('修改信息',self)
+        self.bt5.move(200,260)
+
+        self.show()
+
+        # 将每个按钮的按下和弹出对话框相关联
+        self.bt1.clicked.connect(self.showDialog)  
+        self.bt2.clicked.connect(self.showDialog)
+        self.bt3.clicked.connect(self.showDialog)
+        self.bt4.clicked.connect(self.showDialog)
+        self.bt5.clicked.connect(self.showDialog)
+    
+    # 重写弹出对话框方法
+    def showDialog(self):
+        sender = self.sender()  # 获取事件来源
+        sex = ['男','女']
+        if sender == self.bt1:
+            text, ok = QInputDialog.getText(self, '修改姓名', '请输入姓名：')  # 单行文本输入框
+            if ok:
+                self.lb6.setText(text) 
+        elif sender == self.bt2:
+            text, ok = QInputDialog.getInt(self, '修改年龄', '请输入年龄：', min = 1)  # 整数输入框，可用箭头调整
+            # 可设置最大值max，最小值min，步长step
+            if ok:
+                self.lb7.setText(str(text))
+        elif sender == self.bt3:
+            text, ok = QInputDialog.getItem(self, '修改性别', '请选择性别：', sex)  # 下拉框
+            if ok:
+                self.lb8.setText(text)        
+        elif sender == self.bt4:
+            text, ok = QInputDialog.getDouble(self, '修改身高', '请输入身高：', min = 1.0)  # 浮点数输入框，可用箭头调整
+            # 可设置最大值max，最小值min，步长step
+            if ok:
+                self.lb9.setText(str(text))
+        elif sender == self.bt5:
+            text, ok = QInputDialog.getMultiLineText(self, '修改信息', '请输入个人信息：')  # 多行文本输入框
+            if ok:
+                self.tb.setText(text)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+```
+
+# 字体，颜色和打开文件对话框
+
+```python
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QColorDialog, QFontDialog, QTextEdit, QFileDialog
+import sys
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+    def initUI(self):
+
+        self.setGeometry(300, 300, 500, 300)
+        self.setWindowTitle('关注微信公众号：学点编程吧--记得好看点')
+
+
+        self.tx = QTextEdit(self)
+        self.tx.setGeometry(20, 20, 300, 270)
+
+        self.bt1 = QPushButton('打开文件',self)
+        self.bt1.move(350,20)
+        self.bt2 = QPushButton('选择字体',self)
+        self.bt2.move(350,70)
+        self.bt3 = QPushButton('选择颜色',self)
+        self.bt3.move(350,120)
+
+        self.bt1.clicked.connect(self.openfile)
+        self.bt2.clicked.connect(self.choicefont)
+        self.bt3.clicked.connect(self.choicecolor)
+
+        self.show()
+    
+    def openfile(self):
+        fname = QFileDialog.getOpenFileName(self, '打开文件','./')  # 参数分别为窗口名称，默认路径，返回包含文件名的元组，第一个是文件名的列表
+        # 使用QFileDialog.getOpenFileNames可以打开多个文件
+        # fname = QFileDialog.getOpenFileName(self, '打开文件','./',("Images (*.png *.xpm *.jpg)"))  # 可以这样设置文件类型过滤
+        if fname[0]:
+            with open(fname[0], 'r',encoding='gb18030', errors='ignore') as f:
+                self.tx.setText(f.read()) 
+    
+    def choicefont(self):
+        font, ok = QFontDialog.getFont()  # 打开字体选取对话框
+        if ok:
+            self.tx.setCurrentFont(font)  # 设置某个文本的字体
+    
+    def choicecolor(self):
+        col = QColorDialog.getColor()  # 打开颜色选取对话框
+        if col.isValid():
+            self.tx.setTextColor(col)  # 设置某个文本的颜色
+
+# 注意，上面的修改颜色和字体，对于一个大的文本输入框来说，只能更改选中的文本
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+```
+
+# 保存文件和打印
+
+```python
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QTextEdit, QFileDialog, QDialog
+from PyQt5.QtPrintSupport import QPageSetupDialog, QPrintDialog, QPrinter
+import sys
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.printer = QPrinter()
+        self.initUI()
+
+    def initUI(self):
+
+        self.setGeometry(300, 300, 500, 400)
+        self.setWindowTitle('关注微信公众号：学点编程吧--保存、打印文件')
+
+
+        self.tx = QTextEdit(self)
+        self.tx.setGeometry(20, 20, 300, 270)
+
+        self.bt1 = QPushButton('打开文件',self)
+        self.bt1.move(350,20)
+        self.bt2 = QPushButton('打开多个文件',self)
+        self.bt2.move(350,70)
+        self.bt5 = QPushButton('保存文件',self)
+        self.bt5.move(350,220)
+        self.bt6 = QPushButton('页面设置',self)
+        self.bt6.move(350,270)
+        self.bt7 = QPushButton('打印文档',self)
+        self.bt7.move(350,320)
+
+        self.bt1.clicked.connect(self.openfile)
+        self.bt2.clicked.connect(self.openfiles)
+        self.bt5.clicked.connect(self.savefile)
+        self.bt6.clicked.connect(self.pagesettings)
+        self.bt7.clicked.connect(self.printdialog)
+
+        self.show()
+    
+    def openfile(self):
+        fname = QFileDialog.getOpenFileName(self, '学点编程吧:打开文件','./')
+            if fname[0]:
+                with open(fname[0], 'r',encoding='gb18030',errors='ignore') as f:
+                    self.tx.setText(f.read())
+    
+    def openfiles(self):
+        fnames = QFileDialog.getOpenFileNames(self, '学点编程吧:打开多个文件','./')  # 这个可以打开多个文件
+            if fnames[0]: 
+                for fname in fnames[0]:
+                    with open(fname, 'r',encoding='gb18030',errors='ignore') as f:
+                        self.tx.append(f.read())  # 注意这里使用的是append方法，不会覆盖文本框里已有的内容
+    
+    def savefile(self):
+        fileName = QFileDialog.getSaveFileName(self, '学点编程吧:保存文件','./',"Text files (*.txt)")  # 保存文件对话框，设定默认格式，返回文件名
+            if fileName[0]:
+                with open(fileName[0], 'w',encoding='gb18030',errors='ignore') as f:
+                    f.write(self.tx.toPlainText())  # 将文本转换为纯文本
+    
+    def pagesettings(self):
+        printsetdialog = QPageSetupDialog(self.printer,self)
+        printsetdialog.exec_()
+    
+    def printdialog(self):
+        printdialog = QPrintDialog(self.printer,self)
+        if QDialog.Accepted == printdialog.exec_():
+            self.tx.print(self.printer)
+        
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+```
+
+# 各种消息对话框
+
+```python
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QMessageBox, QLabel, QCheckBox
+from PyQt5.QtGui import QPixmap
+import sys
+
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        self.setGeometry(300, 300, 330, 300)
+        self.setWindowTitle('关注微信公众号：学点编程吧--消息对话框')
+
+        self.la = QLabel('这里将会显示我们选择的按钮信息', self)
+        self.la.move(20, 20)
+        self.bt1 = QPushButton('提示', self)
+        self.bt1.move(20, 70)
+        self.bt2 = QPushButton('询问', self)
+        self.bt2.move(120, 70)
+        self.bt3 = QPushButton('警告', self)
+        self.bt3.move(220, 70)
+        self.bt4 = QPushButton('错误', self)
+        self.bt4.move(20, 140)
+        self.bt5 = QPushButton('关于', self)
+        self.bt5.move(120, 140)
+        self.bt6 = QPushButton('关于Qt', self)
+        self.bt6.move(220, 140)
+
+        self.bt1.clicked.connect(self.info)
+        self.bt2.clicked.connect(self.question)
+        self.bt3.clicked.connect(self.warning)
+        self.bt4.clicked.connect(self.critical)
+        self.bt5.clicked.connect(self.about)
+        self.bt6.clicked.connect(self.aboutqt)
+
+        self.show()
+
+    def info(self):
+        reply = QMessageBox.information(
+            self, '提示', '这是一个消息提示对话框!', QMessageBox.Ok | QMessageBox.Close, QMessageBox.Close)
+        # 提示消息对话框，只有按钮
+        if reply == QMessageBox.Ok:
+            self.la.setText('你选择了Ok！')
+        else:
+            self.la.setText('你选择了Close！')
+
+    def question(self):
+        reply = QMessageBox.question(self, '询问', '这是一个询问消息对话框，默认是No',
+                                     QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel, QMessageBox.No)
+        # 提问对话框，也只有按钮
+        if reply == QMessageBox.Yes:
+            self.la.setText('你选择了Yes！')
+        elif reply == QMessageBox.No:
+            self.la.setText('你选择了No！')
+        else:
+            self.la.setText('你选择了Cancel！')
+
+    def warning(self):
+        # reply = QMessageBox.warning(self,'警告','这是一个警告消息对话框', QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel, QMessageBox.Save)
+        # 上面这个是基于静态方法，按钮只能调用预设按钮，所以按钮上的问题与功能都制衡使用预设的，所以只能显示文本，按钮
+        
+        # 以下是基于对象的，可以自己从基本元素开始构建对话框，虽然繁琐，但自定义程度高，可以自己添加想要的元素和功能
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('警告')  # 设置标题
+        msgBox.setIcon(QMessageBox.Warning)  # 设置图标
+        msgBox.setText('这是一个警告消息对话框')  # 设置提示文本
+        msgBox.setInformativeText('出现更改愿意保存吗?')  # 设置提示文本下的信息文本
+        Save = msgBox.addButton('保存', QMessageBox.AcceptRole)  # 添加按钮，可以设定文本和功能
+        NoSave = msgBox.addButton('取消', QMessageBox.RejectRole)
+        Cancel = msgBox.addButton('不保存', QMessageBox.DestructiveRole)
+        msgBox.setDefaultButton(Save)  # 设定默认按钮
+        cb = QCheckBox('所有文档都按此操作')  # 这里是一个在界面上的勾选框
+        cb.stateChanged.connect(self.check)  # 将单选框的状态改变连接至另一个函数
+        msgBox.setCheckBox(cb)  # 添加单选框
+        reply = msgBox.exec()  # 每一个对话框都会返回用户选择的按钮，可用户后续的判断
+        
+        if reply == QMessageBox.AcceptRole:
+            self.la.setText('你选择了保存！')
+        elif reply == QMessageBox.RejectRole:
+            self.la.setText('你选择了取消！')
+        else:
+            self.la.setText('你选择了不保存！')
+
+    def critical(self):
+        # reply = QMessageBox.critical(self, '错误', '这是一个错误消息对话框', QMessageBox.Retry |
+        #                              QMessageBox.Abort | QMessageBox.Ignore, QMessageBox.Retry)
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('错误')
+        msgBox.setIcon(QMessageBox.Critical)
+        msgBox.setText("这是一个错误消息对话框")
+        msgBox.setStandardButtons(
+            QMessageBox.Retry | QMessageBox.Abort | QMessageBox.Ignore)  # 在使用对象的方法下添加默认按钮
+        msgBox.setDefaultButton(QMessageBox.Retry)
+        msgBox.setDetailedText('这是详细的信息：学点编程吧，我爱你！')  # 添加详细信息按钮，并设置文本，只有在该字符串被设置后，才会出现按钮，不需要单独添加按钮
+        reply = msgBox.exec()  # 注意，基于对象的自定义消息框，都需要在定义完成后执行一下，以显示对话框
+
+        if reply == QMessageBox.Retry:
+            self.la.setText('你选择了Retry！')
+        elif reply == QMessageBox.Abort:
+            self.la.setText('你选择了Abort！')
+        else:
+            self.la.setText('你选择了Ignore！')
+
+    def about(self):
+        # QMessageBox.about(self,'关于','这是一个关于消息对话框!')
+        msgBox = QMessageBox(QMessageBox.NoIcon, '关于', '不要意淫了，早点洗洗睡吧!')
+        msgBox.setIconPixmap(QPixmap("beauty.png"))  # 添加自定义图标，需要使用QPixmap进行图标类型的映射
+        msgBox.exec()
+
+    def aboutqt(self):
+        QMessageBox.aboutQt(self, '关于Qt')
+
+    def check(self):
+        if self.sender().isChecked():  # 读取事件来源，也就是单选框的状态
+            self.la.setText('你打勾了哦')
+        else:
+            self.la.setText('怎么又不打了啊')
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+```
+
+# 自定义对话框
+
+```python
+from PyQt5.QtWidgets import QDialog, QApplication, QLineEdit, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
+from PyQt5.QtCore import Qt, QEvent, QRegExp
+from PyQt5.QtGui import QKeyEvent, QKeySequence, QRegExpValidator
+
+
+class PasswdDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.resize(350, 100)
+        self.setWindowTitle("密码输入框")
+
+        self.lb = QLabel("请输入密码：", self)
+
+        self.edit = QLineEdit(self)
+        self.edit.installEventFilter(self)  # 安装事件过滤器
+
+        self.bt1 = QPushButton("确定", self)
+        self.bt2 = QPushButton("取消", self)
+
+        # 怎么布局在布局篇介绍过，这里代码省略...
+
+        self.edit.setContextMenuPolicy(
+            Qt.NoContextMenu)  # 设定该控件的上下文菜单策略，此处为忽略上下文菜单
+        # 设定灰色占位文本，用户输入后消失，不需要自己全选删除，推荐在文本输入框中使用
+        self.edit.setPlaceholderText("密码6-15位，只能有数字和字母，必须以字母开头")
+        self.edit.setEchoMode(QLineEdit.Password)  # 设定文本显示方式
+        # QLineEdit.Normal  直接显示输入的字符
+        # QLineEdit.NoEcho  不要显示任何字符(like in Unix)
+        # QLineEdit.Password  用掩码字符代替原本输入字符显示，如小圆点或星号
+        # QLineEdit.PasswordEchoOnEdit  只在编辑时显示字符，点击其他控件会替换成掩码
+
+        # 创建正则匹配，构造验证器并设置文本框只接收符合条件的文本
+        regx = QRegExp("^[a-zA-Z][0-9A-Za-z]{14}$")
+        validator = QRegExpValidator(regx, self.edit)
+        self.edit.setValidator(validator)
+
+        self.bt1.clicked.connect(self.Ok)
+        self.bt2.clicked.connect(self.Cancel)
+
+        object = QObject()
+
+    # 配置事件过滤器
+    def eventFilter(self, object, event):
+        if object == self.edit:
+            if event.type() == QEvent.MouseMove or event.type() == QEvent.MouseButtonDblClick:
+                return True  # 返回True意味着忽略该次事件
+            elif event.type() == QEvent.KeyPress:
+                key = QKeyEvent(event)
+                if key.matches(QKeySequence.SelectAll) or key.matches(QKeySequence.Copy) or key.matches(QKeySequence.Paste):
+                    return True
+        return QDialog.eventFilter(self, object, event)  # 如果如果没有忽略任何事件，就继续监视事件
+
+    def Ok(self):
+        '''配置一些基本的密码长度检测
+        '''
+        self.text = self.edit.text()
+        if len(self.text) == 0:
+            QMessageBox.warning(self, "警告", "密码为空")
+        elif len(self.text) < 6:
+            QMessageBox.warning(self, "警告", "密码长度低于6位")
+        else:
+            self.done(1)          # 结束对话框返回1
+
+    def Cancel(self):
+        self.done(0)  # 结束对话框返回0
+```
+
+# 进度条对话框
+
+```python
+import sys
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (QApplication, QLabel, QLineEdit, QMessageBox,
+                             QProgressDialog, QPushButton, QWidget)
+
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.resize(300, 150)
+        self.setWindowTitle("微信公众号：学点编程吧--进度对话框")
+
+        self.lb = QLabel("文件数量", self)
+        self.lb.move(20, 40)
+
+        self.bt1 = QPushButton('开始', self)
+        self.bt1.move(20, 80)
+        self.bt1.clicked.connect(self.showDialog)
+
+        self.edit = QLineEdit('100000', self)
+        self.edit.move(100, 40)
+
+        self.show()
+
+    def showDialog(self):
+        num = int(self.edit.text())
+        progress = QProgressDialog(self)  # 创建一个进度条对话框
+        progress.setWindowTitle("请稍等")
+        progress.setLabelText("正在操作...")
+        progress.setCancelButtonText("取消")
+        progress.setMinimumDuration(5)  # 设置进度条对话框出现的最低时间，只有超过这个时间，进度条才显示
+        # 还可以使用setMinimum()和setMaxmun()来设置进度条总进度区间
+        progress.setWindowModality(Qt.WindowModal)  # 此属性保留由模态小部件阻止的窗口，TODO这个需要进一步研究
+        progress.setRange(100, num)  # 相当于setMinimun()和setMaxmun()
+        for i in range(num):
+            progress.setValue(i)  # 每一步都更新进度条显示的值
+            if progress.wasCanceled():  # 如果按下取消键，这里是默认关联到进度条对话框的取消按钮
+                QMessageBox.warning(self, "提示", "操作失败")
+                break
+            if i == num - 1:
+                progress.setValue(num)  # 这个是进度条对话框的退出条件，当其等于设置的最大值时，对话框退出
+                # 对话框自动在操作结束时重置并隐藏自身，使用setAutoReset()和setAutoClose()来更改此行为。
+                QMessageBox.information(self, "提示", "操作成功")
+                break
+        
+        # 以下是对象化的创建
+        # progress = QProgressDialog(self)
+        # progress.setWindowTitle("请稍等")  
+        # progress.setLabelText("正在操作...")
+        # progress.setCancelButtonText("取消")
+        # progress.setMinimumDuration(5)
+        # progress.setWindowModality(Qt.WindowModal)
+        # progress.setRange(0,num)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+```
+
+# 单选/复选框
+
+```python
+from PyQt5.QtWidgets import QWidget, QCheckBox, QApplication, QPushButton, QMessageBox
+from PyQt5.QtCore import Qt
+import sys
+
+
+class Example(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        self.cb1 = QCheckBox('全选', self)
+        self.cb2 = QCheckBox('你是', self)
+        self.cb3 = QCheckBox('我的', self)
+        self.cb4 = QCheckBox('宝贝', self)
+        self.bt = QPushButton('提交', self)
+
+       # 为减少行数，部分非重要代码省略....
+
+        self.cb1.stateChanged.connect(self.changecb1)  # 当第一个复选框状态改变时，触发函数
+        self.cb2.stateChanged.connect(self.changecb2)
+        self.cb3.stateChanged.connect(self.changecb2)
+        self.cb4.stateChanged.connect(self.changecb2)
+        self.bt.clicked.connect(self.go)
+
+        self.show()
+
+    def go(self):
+        '''通过判断多个复选框的状态来改变文本的内容
+        '''
+        if self.cb2.isChecked() and self.cb3.isChecked() and self.cb4.isChecked():
+            QMessageBox.information(self, 'I Love U', '你是我的宝贝！')
+        elif self.cb2.isChecked() and self.cb3.isChecked():
+            QMessageBox.information(self, 'I Love U', '你是我的！')
+        elif self.cb2.isChecked() and self.cb4.isChecked():
+            QMessageBox.information(self, 'I Love U', '你是宝贝！')
+        elif self.cb3.isChecked() and self.cb4.isChecked():
+            QMessageBox.information(self, 'I Love U', '我的宝贝！')
+        elif self.cb2.isChecked():
+            QMessageBox.information(self, 'I Love U', '你是！')
+        elif self.cb3.isChecked():
+            QMessageBox.information(self, 'I Love U', '我的！')
+        elif self.cb4.isChecked():
+            QMessageBox.information(self, 'I Love U', '宝贝！')
+        else:
+            QMessageBox.information(self, 'I Love U', '貌似你没有勾选啊！')
+
+    def changecb1(self):
+        '''编辑第一个全选复选框的逻辑，即用全选复选框的状态改变下面多个复选框的状态
+           \n注意cb.checkState(), Qt.Checked, Qt.Unchecked, setChecked(T/F)的使用
+        '''
+        if self.cb1.checkState() == Qt.Checked:
+            self.cb2.setChecked(True)
+            self.cb3.setChecked(True)
+            self.cb4.setChecked(True)
+        elif self.cb1.checkState() == Qt.Unchecked:
+            self.cb2.setChecked(False)
+            self.cb3.setChecked(False)
+            self.cb4.setChecked(False)
+
+    def changecb2(self):
+        # 如果三个复选框全部被选中，则将此复选框选中
+        if self.cb2.isChecked() and self.cb3.isChecked() and self.cb4.isChecked():
+            self.cb1.setCheckState(Qt.Checked)
+        # 如果部分被选中，则将此复选框的状态改为部分选中
+        elif self.cb2.isChecked() or self.cb3.isChecked() or self.cb4.isChecked():
+            self.cb1.setTristate()  # 设置该复选框为三态复选框，即可以被部分选中
+            self.cb1.setCheckState(Qt.PartiallyChecked)
+        # 若全部都没选中，则设置该复选框为未选中
+        else:
+            self.cb1.setTristate(False)
+            self.cb1.setCheckState(Qt.Unchecked)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())
+
+```
+
+# 单选按钮
+
+```python
+from PyQt5.QtWidgets import QWidget, QRadioButton, QApplication, QPushButton, QMessageBox, QButtonGroup
+import sys
+
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        self.rb11 = QRadioButton('你是', self)
+        self.rb12 = QRadioButton('我是', self)
+        self.rb13 = QRadioButton('他是', self)
+        self.rb21 = QRadioButton('大美女', self)
+        self.rb22 = QRadioButton('大帅哥', self)
+        self.rb23 = QRadioButton('小屁孩', self)
+
+        bt1 = QPushButton('提交', self)
+
+        # 为节省行数，部分非重要代码省略...
+
+        # 按钮加入一个ButtonGroup，可以实现同组内单选互斥
+        # 如果不加入分组，则所有单选按钮之前默认互斥
+        self.bg1 = QButtonGroup(self)
+        self.bg1.addButton(self.rb11, 11)  
+        # 将按钮加入按键组以后，设定一个触发信号，每当该按钮被按下，则返回该信号值，后面可以通过这个信号值判断是哪个按键被触发
+        # 如果不设置，默认按顺序-2, -3, -4 ...
+        self.bg1.addButton(self.rb12, 12)
+        self.bg1.addButton(self.rb13, 13)
+
+        self.bg2 = QButtonGroup(self)
+        self.bg2.addButton(self.rb21, 21)
+        self.bg2.addButton(self.rb22, 22)
+        self.bg2.addButton(self.rb23, 23)
+
+        self.info1 = ''
+        self.info2 = ''
+
+        # 然后将按键组的选择连接到对应函数
+        self.bg1.buttonClicked.connect(self.rbclicked)
+        self.bg2.buttonClicked.connect(self.rbclicked)
+        
+        bt1.clicked.connect(self.submit)
+
+        self.show()
+
+    def submit(self):
+        if self.info1 == '' or self.info2 == '':
+            QMessageBox.information(self, 'What?', '貌似有没有选的啊，快去选一个吧！')
+        else:
+            QMessageBox.information(self, 'What?', self.info1+self.info2)
+
+    def rbclicked(self):
+        # 通过判断事件来源，选择对应行为
+        sender = self.sender()
+        if sender == self.bg1:
+            if self.bg1.checkedId() == 11:  
+            # 检查按键组内的触发ID
+            # 如果某按键没有被按下，则发送信号-1
+                self.info1 = '你是'
+            elif self.bg1.checkedId() == 12:
+                self.info1 = '我是'
+            elif self.bg1.checkedId() == 13:
+                self.info1 = '他是'
+            else:
+                self.info1 = ''
+        else:
+            if self.bg2.checkedId() == 21:
+                self.info2 = '大美女'
+            elif self.bg2.checkedId() == 22:
+                self.info2 = '大帅哥'
+            elif self.bg2.checkedId() == 23:
+                self.info2 = '小屁孩'
+            else:
+                self.info2 = ''
+
+
+if __name__ == '__main__':
+    # 常规代码，省略...
+    pass
+```
+
+# 普通按钮
+
+```python
+class Example(QWidget):
+    def initUI(self):
+
+
+        self.bt2 = QPushButton('发送验证码',self)
+        self.bt2.clicked.connect(self.Action)
+        
+        menu = QMenu(self)  # 这里新建了一个菜单
+        menu.addAction('我是')
+        menu.addSeparator()
+        menu.addAction('世界上')
+        menu.addSeparator()
+        menu.addAction('最帅的')
+        
+        self.bt1 = QPushButton("这是什么",self)
+        self.bt1.setMenu(menu)  # 然后将这个菜单附加到按钮上
+
+        self.count = 10
+
+        self.time = QTimer(self)  # 计时器部件
+        self.time.setInterval(1000)  # 设置每一次时间变化的间隔
+        self.time.timeout.connect(self.Refresh)  # 倒计时结束后触发Refresh
+
+        self.show()
+
+    def Action(self):
+        if self.bt2.isEnabled():  # 当第二个按钮可以按了
+            self.time.start()  # 开始计时器
+            self.bt2.setEnabled(False)  # 将此按钮算作不可按
+    
+    def Refresh(self):
+        if self.count > 0:
+            self.bt2.setText(str(self.count)+'秒后重发')  # 试试改变bt2按钮的文字
+            self.count -= 1
+        else:
+            self.time.stop()
+            self.bt2.setEnabled(True)
+            self.bt2.setText('发送验证码')
+            self.count = 10
+```
+
+# 工具按钮
+
+```python
+class Example(QWidget):
+    def initUI(self):
+
+        tb = QToolButton(self)  # 新建一个工具按钮
+        tb.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        # 设置工具按钮的样式，一般图标在文字旁边的是常用的
+        # ToolButtonTextOnly  只显示文字
+        # tb.setArrowType(Qt.DownArrow)  
+        # 这个会在将按钮的图标设置为一个向下的箭头，提示用户这是一个工具按钮，但是比较丑陋
+        tb.setToolTip('选择适合你的支付方式')
+        tb.setPopupMode(QToolButton.MenuButtonPopup)
+        # 工具按钮的弹出方式
+        # QToolButton.DelayedPopup  按住一段时间以后弹出
+        # QToolButton.MenuButtonPopup  在按钮右方有个箭头
+        # QToolButton.InstantPopup  点击按钮本身，所以本身的点击不会触发其他事件
+
+        tb.setText('支付方式')
+        tb.setIcon(QIcon('icon/bank.ico'))
+        tb.setAutoRaise(True)
+        # 当鼠标滑过时，按钮是否会有一个升起的效果
+
+        menu = QMenu(self)
+        # 把不同动作抽象成QAction，方便将其绑定到不同的地方，比如菜单栏，工具栏，上下文菜单或者任何按钮
+        # self.alipayAct = QAction()
+        # self.alipayAct.setText('abc')
+        # self.alipayAct.triggered.connect(self.some_function)
+        self.alipayAct = QAction(QIcon('icon/alipay.ico'),'支付宝支付', self)
+        self.wechatAct = QAction(QIcon('icon/wechat.ico'),'微信支付', self)
+        self.visaAct = QAction(QIcon('icon/visa.ico'),'Visa卡支付', self)
+        self.master_cardAct = QAction(QIcon('icon/master_card.ico'),'万事达卡支付', self)
+
+        menu.addAction(self.alipayAct)
+        menu.addAction(self.wechatAct)
+        menu.addSeparator()
+        menu.addAction(self.visaAct)
+        menu.addAction(self.master_cardAct)
+
+        tb.setMenu(menu)
+        self.show()
+
+        self.alipayAct.triggered.connect(self.on_click)
+        self.wechatAct.triggered.connect(self.on_click)
+        self.visaAct.triggered.connect(self.on_click)
+        self.master_cardAct.triggered.connect(self.on_click)
+        
+    def on_click(self):
+        if self.sender() == self.alipayAct:
+            QDesktopServices.openUrl(QUrl('https://www.alipay.com/'))
+        elif self.sender() == self.wechatAct:
+            QDesktopServices.openUrl(QUrl('https://pay.weixin.qq.com/index.php'))
+        elif self.sender() == self.visaAct:
+            QDesktopServices.openUrl(QUrl('https://www.visa.com.cn/'))
+        else:
+            QDesktopServices.openUrl(QUrl('https://www.mastercard.com.cn/zh-cn.html'))
+```
+
+# 抽象按钮
+
+```python
+# 上述按钮，都继承了QAbstractButton的父类，拥有很多共同的方法
+
+```
+
+
+
