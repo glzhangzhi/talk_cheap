@@ -1485,8 +1485,285 @@ class Example(QWidget):
 
 ```python
 # 上述按钮，都继承了QAbstractButton的父类，拥有很多共同的方法
+button.setText('some_text')
+button.setIcon('icon.png')
+# 都具有图标和标签，可以使用setText()和setIcon()来设置
+# 都可以被禁用，禁用后会出现相应的视觉效果
+button.setText('&Click')
+button.setShortcut('alt+F7')
+# 可以在文本中加入&字符，之后的字母会作为快捷键使用,&f = alt + f, 其实这里是当触发按键时，调用了animateClick()，也可以使用setShortcut('Alt+F7')自定义快捷键
+button.setDefault()
+# 可以使用setDefault()设定默认按钮
+button.isDown()
+button.isChecked()
+button.isEnabled()
+# 使用isDown(),isChecked(),isEnabled()查看按钮是否被按下、是否被选中、是否能被按下
+bt.setAutoRepeat()
+bt.autoRepeatDelay()
+bt.autoRepeatInterval()
+# 设置当按钮持续被按下时，是否有自动重复的行为，以及持续按键多久触发，和每次重复之间的间隔
+bt.isDown()
+bt.isCheck()
+# 这两者的区别是Down指按下，指一个按钮被按下的瞬间及其一直保持被按下，Check指有个框在按钮周围，按空格键可以选中这个按钮
+bt.pressed()  # 当按钮被按下时发出
+bt.release()  # 当按钮被释放时发出
+bt.clicked()  # 当按钮被按下然后被释放时发出
+bt.toggle()  # 当开关按钮的状态发生变化是发出
+# 按钮的四种信号
 
 ```
 
+```python
+class Example(QWidget):
 
+    def initUI(self):
 
+        self.resize(500,300)
+        self.setWindowTitle('关注微信公众号：学点编程吧--抽象按钮的学习1（QAbstractButton）')
+
+        label1 = QLabel('密码输入区',self)
+        label2 = QLabel('正确密码：麻',self)
+        label3 = QLabel('你输入的密码：',self)
+
+        self.label4 = QLabel('  ',self)
+
+        bt1 = QPushButton('芝',self)
+        bt2 = QPushButton('麻',self)
+        bt3 = QPushButton('开',self)
+        bt4 = QPushButton('门',self)
+
+        bt1.setCheckable(True)  # 设置按钮为checkable状态，即点击后按钮下陷，需要在按一次才能弹起
+        bt2.setCheckable(True)
+        bt3.setCheckable(True)
+        bt4.setCheckable(True)
+
+        bt1.setAutoExclusive(True)  # 设置按钮的互斥
+        bt2.setAutoExclusive(True)
+        bt3.setAutoExclusive(True)
+        bt4.setAutoExclusive(True)
+
+        bt1.clicked.connect(self.setPassword)
+        bt2.clicked.connect(self.setPassword)
+        bt3.clicked.connect(self.setPassword)
+        bt4.clicked.connect(self.setPassword)
+
+    def setPassword(self):
+        word = self.sender().text()
+        self.label4.setText(word)
+        if word == '麻':
+            QMessageBox.information(self,'提示','恭喜，密码正确，可以进入！')
+```
+
+# 滑块
+
+```python
+from PyQt5.QtWidgets import QWidget, QApplication, QSlider, QLabel
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+import sys
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        #部分非重要代码省略...
+
+        self.sld1 = QSlider(Qt.Vertical,self)  # 初始化垂直滑块对象
+        self.sld1.setGeometry(30,40,30,100)
+        self.sld1.setMinimum(0)  # 设置最小值
+        self.sld1.setMaximum(99)  # 设置最大值
+        self.sld1.setTickPosition(QSlider.TicksLeft)  # 设置滑块刻度位置
+        # TicksBothSides, TicksAbove, TicksBelow, TicksLeft, TicksRight
+ 
+        self.sld2 = QSlider(Qt.Horizontal,self)  # 初始化水平滑块对象
+        self.sld2.setGeometry(500,350,100,30)
+        self.sld2.setMinimum(0)
+        self.sld2.setMaximum(99)
+
+        self.sld1.valueChanged[int].connect(self.changevalue)  # 将值传入函数，而不是将值改变的事件传入函数
+        self.sld2.valueChanged[int].connect(self.changevalue)
+
+        self.label1 = QLabel(self)
+        self.label1.setPixmap(QPixmap('01.jpg'))
+        self.label1.setGeometry(80,150,600,180)
+
+        self.label2 = QLabel('滑动块1当前值: 0 ',self)
+        self.label2.move(70,70)
+
+        self.label3 = QLabel('滑动块2当前值: 0 ',self)
+        self.label3.move(550,390)
+
+        self.show()
+    
+    def changevalue(self,value):
+        sender = self.sender()
+        if sender == self.sld1:
+            self.sld2.setValue(value)  # 通过数值改变滑块的位置
+        else:
+            self.sld1.setValue(value)
+        self.label2.setText('滑动块1当前值:'+str(value))
+        self.label3.setText('滑动块2当前值:'+str(value))
+        if value == 0:
+            self.label1.setPixmap(QPixmap('01.jpg'))
+        elif value > 0 and value <= 30:
+            self.label1.setPixmap(QPixmap('02.jpg'))
+        elif value > 30 and value < 80:
+            self.label1.setPixmap(QPixmap('03.jpg'))
+        else:
+            self.label1.setPixmap(QPixmap('04.jpg'))
+        
+if __name__ == '__main__':
+    #常规代码省略...
+```
+
+# 进度条
+
+```python
+from PyQt5.QtWidgets import QWidget, QApplication, QProgressBar, QPushButton, QMessageBox
+from PyQt5.QtCore import Qt, QBasicTimer
+import sys
+
+class Example(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()    def initUI(self):
+
+        self.resize(600,480)
+        self.setWindowTitle('关注微信公众号：学点编程吧--跑马灯（进度条）')
+
+        self.pb11 = QProgressBar(self)  # 初始化进度条对象
+        #self.pb12、self.pb13、self.pb14、self.pb21、self.pb22都这样创建的
+        #代码省略...
+
+        self.pb11.setOrientation(Qt.Horizontal)  # 设置进度条的方向
+        self.pb12.setOrientation(Qt.Vertical)
+        self.pb13.setOrientation(Qt.Horizontal)
+        self.pb14.setOrientation(Qt.Vertical)
+        #布局的代码省略...
+
+        self.pb21.setFormat("%v")  # %p 已完成百分比 %m 总step数 %v 当前step数
+        self.pb22.setInvertedAppearance(True)  # 进度条反向增长
+
+        self.b1 = QPushButton('外圈跑马灯',self)
+        self.b2 = QPushButton('内圈跑进度',self)
+
+        self.show()
+
+        self.timer = QBasicTimer()
+        self.step = 0
+
+        self.b1.clicked.connect(self.running)
+        self.b2.clicked.connect(self.doaction)
+        
+    def timerEvent(self, e):
+        if self.step >= 100:
+            self.timer.stop()
+            QMessageBox.information(self,'提示','内圈收工了!')
+            self.b2.setText('再来一次')
+            self.step = 0
+            return
+
+        self.step = self.step + 1
+        self.pb21.setValue(self.step)
+        self.pb22.setValue(self.step)
+    def doaction(self):
+        if self.timer.isActive():
+            self.timer.stop()
+            self.b2.setText('继续')
+        else:
+            self.timer.start(100, self)
+            self.b2.setText('停止')
+        
+    def running(self):
+        self.pb11.setMinimum(0)
+        self.pb11.setMaximum(0)
+        self.pb12.setInvertedAppearance(True)
+        self.pb12.setMinimum(0)
+        self.pb12.setMaximum(0)
+        self.pb13.setInvertedAppearance(True)
+        self.pb13.setMinimum(0)
+        self.pb13.setMaximum(0)
+        self.pb14.setMinimum(0)
+        self.pb14.setMaximum(0)
+    
+if __name__ == '__main__':
+    #常规代码省略...
+```
+
+# 数值调整框
+
+```python
+class HolyShitBox(QSpinBox):
+    def valueFromText(self,str):
+        regExp = QRegExp("(\\d+)(\\s*[xx]\\s*\\d+)?")
+        if regExp.exactMatch(str):
+            return int(regExp.cap(1))
+        else:
+            return 0
+
+    def textFromValue(self,num):
+        return "{0} x {1}".format(num,num)
+            
+            
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        self.resize(350,280)
+        self.setWindowTitle('关注微信公众号：学点编程吧--微调框')
+
+        lb1 = QLabel('普通微调框',self)
+        lb2 = QLabel('加强微调框',self)
+        lb3 = QLabel('超神微调框',self)
+
+        self.sp1 = QSpinBox(self)  # 整数调整框
+        self.sp2 = QSpinBox(self)
+        self.sp3 = HolyShitBox(self)  # 自定义调整框
+
+        self.sl = QSlider(Qt.Horizontal,self) 
+    
+        #布局代码省略...
+
+        self.sp1.setRange(-10, 200)  # 设定数值范围
+        self.sp1.setSingleStep(10)  # 设定步长
+        self.sp1.setWrapping(True)  # 是否能循环调整
+        self.sp1.setValue(-10)  # 设定当前调整框数值
+
+        self.sp2.setRange(0, 100)
+        self.sp2.setSingleStep(10)
+        self.sp2.setValue(10)
+        self.sp2.setPrefix("我的帅达到 ") # 设定调整框文字的前缀
+        self.sp2.setSuffix(" %，正在充帅中...")  # 设定调整框文字的后缀
+
+        self.sp3.setRange(10, 50)
+        self.sp3.setValue(10)
+        self.sp3.setWrapping(True)
+
+        self.sl.setRange(-10, 200)
+        self.sl.setValue(-10)
+
+        self.sp1.valueChanged.connect(self.slider1_changevalue)
+        self.sp2.valueChanged.connect(self.slider2_changevalue)
+        self.sl.valueChanged.connect(self.spinbox_changevalue)
+        self.show()
+        
+    def slider1_changevalue(self,value):
+        self.sl.setValue(value)
+    
+    def slider2_changevalue(self,value):
+        if self.sp2.value() == self.sp2.maximum():
+            QMessageBox.information(self,'提示','你怎么还再充帅，你不知道你的帅已经引起了别人的嫉妒吗？')
+            self.sp2.setSuffix(" %,我踏马太帅了！！")
+        elif self.sp2.minimum()< self.sp2.value() < self.sp2.maximum():
+            self.sp2.setSuffix(" %，正在充帅中...")
+    
+    def spinbox_changevalue(self,value):
+        self.sp1.setValue(value)
+```
