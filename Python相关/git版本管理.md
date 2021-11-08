@@ -1,7 +1,7 @@
 [TOC]
 
 # 安装
-sudo apt-get install git
+`sudo apt-get install git`
 WIndows系统可进入[官网](http://git-scm.com/download/win)下载
 
 # Git工作流程图
@@ -12,6 +12,7 @@ WIndows系统可进入[官网](http://git-scm.com/download/win)下载
 其他的版本管理系统是将文件的差异信息保存下来，储存每个版本与初始版本文件的差异。而Git是在每一次整个项目文件发生改变时，保存一次整个项目文件的快照。
 
 # Git中的校验
+
 Git中所有数据在储存前都用SHA-1计算校验和，以此来引用和索引。
 
 # 使用前配置
@@ -157,7 +158,7 @@ _M  已修改未暂存
 
 # 抓取与拉取
 
-`git getch [remote-name]`
+`git fetch [remote-name]`
 以上指令会访问远程仓库，从中拉取所有还没有的数据，执行完成后，会在本地拥有该远程仓库所有分支的引用，可以随时合并和查看。
 
 在使用clone命令后，会自动为其添加远程仓库并默认以origin为简写，所以执行`git fetch origin`会抓取克隆后（或上一次抓取后）新推送的所有工作。注意它只会更新本地仓库的git信息，不会自动合并或修改当前工作区，需要手动合并。
