@@ -129,4 +129,3 @@ find –regex ‘\\./tmp/.*\\.txt’    路径结尾是.txt且开头tmp
 -o OR
 
 ,  并列，两边都会执行
-
