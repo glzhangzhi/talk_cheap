@@ -1,7 +1,8 @@
 OS目录操作方法
 
 ```python
-os.mkdir('file') # 创建目录
+os.mkdir('dir') # 创建目录
+os.makedirs('a/dirs')  # 递归的创建目录
 shutil.copyfile('oldfile', 'newfile') # 复制文件
 shutil.copy('oldpath', 'newfile or target dir') # 复制文件或目录
 shutil.copytree('olddir', 'new and noexist dir') # 复制目录
