@@ -220,3 +220,64 @@ _M  已修改未暂存
 
 `git merge origin/new_branch`
 合并分支
+
+# 团队开发流程
+
+项目创建者A----------------------------
+
+```
+vim README
+git add .
+git commit
+------------------
+edit
+edit
+git commit
+-----------------
+git remote add origin git@..A..git
+git push origin master
+```
+
+项目贡献者B--------------------------
+
+```
+fork得到自己的仓库 git@..B..git
+git clone git@..B..git
+-------------------
+git checkout -b add_logo
+edit
+edit
+git commit
+---------------------
+git push origin add_logo
+```
+
+B提交Pull Request给A
+
+在A看到B提交的PR后-------------------------
+
+```
+git remote add someB git@..B..git
+git fetch someB
+------------------------------
+git checkout -b test_someB
+git merge someB/add_logo
+----------------------------
+test
+test
+git checkout master
+git merge test_someB
+git branch -D test_someB
+git push origin master
+```
+
+在B收到PR被关闭的通知后-------------------
+
+```
+git branch -D add_logo
+git push origin :add_logo
+git remote add upstream git@..A..git
+git checkout master
+git pull upstream master
+```
+
