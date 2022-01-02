@@ -4,9 +4,6 @@
 sudo apt-get install git
 WIndows系统可进入[官网](http://git-scm.com/download/win)下载
 
-# Git工作流程图
-![image-20211005113509577](C:\Users\glzha\AppData\Roaming\Typora\typora-user-images\image-20211005113509577.png)
-
 # Git与其他版本管理系统的本质区别
 
 其他的版本管理系统是将文件的差异信息保存下来，储存每个版本与初始版本文件的差异。而Git是在每一次整个项目文件发生改变时，保存一次整个项目文件的快照。
@@ -41,9 +38,6 @@ git init
 git add some_file.py
 git commit -m 'initial project version
 ```
-
-# 仓库中文件的四种状态
-![image-20211005144330321](C:\Users\glzha\AppData\Roaming\Typora\typora-user-images\image-20211005144330321.png)
 
 可使用以下指令查看当前仓库的状态
 `git status`
@@ -141,11 +135,6 @@ _M  已修改未暂存
 
 `git checkout -- somefile.py`
 
-# 远程仓库流程图
-
-![image-20211005173949116](C:\Users\glzha\AppData\Roaming\Typora\typora-user-images\image-20211005173949116.png)
-
-
 # 查看远程仓库
 
 `git remote -v`
@@ -186,10 +175,6 @@ _M  已修改未暂存
 
 将newgs分支移除
 `git remote rm newgs`
-
-# Git工作流程
-
-![image-20211005213308298](C:\Users\glzha\AppData\Roaming\Typora\typora-user-images\image-20211005213308298.png)
 
 # 隐藏
 
