@@ -124,7 +124,15 @@ find_elements_by_class_name
 find_elements_by_css_selector
 ```
 
+# 获取标签的属性和内容
+```python
+elem = driver.find_element_by_xpath('.....')
+attr = elem.get_attribute('attribute_name')
+content = elem.text
+```
+
 # Wait指令
+
 用于应对现在网页上应用越来越多的AJAX技术，可以使某个操作等待一定时间或是等待某个条件满足以后再执行
 
 ```python

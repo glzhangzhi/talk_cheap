@@ -43,7 +43,6 @@ path.rename('new_name.txt')
 
 ```
 path = Path('C:/Users/A/B')
-
 path.parts
 ```
 
@@ -112,9 +111,9 @@ path.write_text('This is myfile.txt')
 # is条件判断
 
 ```
-exists()  # 是否存在
-is_dir()  # 是否是目录
-is_file()  # s
+path.exists()  # 是否存在
+path.is_dir()  # 是否是目录
+path.is_file()  # s
 ```
 
 

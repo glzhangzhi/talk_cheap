@@ -1,7 +1,6 @@
 import requests
 from lxml import etree
 from openpyxl import Workbook, load_workbook
-import pickle
 import sys
 from tqdm import tqdm
 
