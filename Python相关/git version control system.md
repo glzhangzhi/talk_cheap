@@ -202,6 +202,9 @@ git reset --hard commit_id
 `git branch -a` 
 查看现有分支
 
+`git branch -vv`
+check local branch with remote trach
+
 `git checkout new_branch`
 切换分支
 
