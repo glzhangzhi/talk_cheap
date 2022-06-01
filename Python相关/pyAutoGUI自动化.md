@@ -6,30 +6,38 @@ screenWidth, screenHeight = pyautogui.size() #读取屏幕长宽
 pyautogui.moveTo(screenWidth / 2, screenHeight / 2) #将鼠标移动到屏幕中间
 ```
 ## 鼠标相关API
+
 ```python
 currentMouseX, currentMouseY = pyautogui.position() #读取鼠标当前位置
 #左上角为坐标原点，X轴向右，Y轴向下
+
 pyautogui.moveTo(100, 150) #移动到坐标100，150
 pyautogui.moveRel(None, 10)  #鼠标向下移动10
 pyautogui.moveTo(500, 500, duration=2, tween=pyautogui.easeInOutQuad)  # 使用tweening/easing函数，设置duration参数使移动持续2秒，如果不设置，就是鼠标闪现到目标点（mac不支持闪现操作
+pyautogui.dragTo(x, y, duration=num_seconds)  # 拖拽操作
+
 pyautogui.click() #点击
+pyautogui.click(x=moveToX, y=moveToY, clicks=num_of_clicks, interval=secs_between_clicks, button='left') #在xy目标点，点击次数num_of_clicks，间隔interval，左键left（中middle，右right）
+pyautogui.rightClick(x=moveToX, y=moveToY)
+pyautogui.middleClick(x=moveToX, y=moveToY)
+pyautogui.doubleClick(x=moveToX, y=moveToY)
+pyautogui.tripleClick(x=moveToX, y=moveToY)
+
 pyautogui.mouseDown(x=moveToX, y=moveToY, button='left') #在指定位置按下鼠标
 pyautogui.mouseUp(x=moveToX, y=moveToY, button='left') #在指定位置放开鼠标
-pyautogui.doubleClick() #双击
-pyautogui.click(x=moveToX, y=moveToY, clicks=num_of_clicks, interval=secs_between_clicks, button='left') #在xy目标点，点击次数num_of_clicks，间隔interval，左键left（中middle，右right）
+
 pyautogui.scroll(amount_to_scroll, x=moveToX, y=moveToY) #滚动屏幕，可以设定鼠标点和滚动距离，正上负下
 ```
 ## 键盘相关API
 ```python
 pyautogui.typewrite('Hello world!', interval=0.25)  #输入hello world，每个字符间隔0.25秒
-#输入的可以是按键的list
+pyautogui.typewrite(['a', 'b', 'c', 'left', 'backspace', 'enter', 'f1'], interval=secs_between_keys)
+
 pyautogui.press('esc') #按esc键
 pyautogui.keyDown('shift') #按下shift键
 pyautogui.press(['left', 'left', 'left', 'left', 'left', 'left']) #按左箭头键6次
 pyautogui.keyUp('shift') #弹起shift键
 pyautogui.hotkey('ctrl', 'c') #组合键ctrl+c
-pyautogui.dragTo(x, y, duration=num_seconds, button='left')  # 拖动鼠标左键到目标点
-pyautogui.dragRel(xOffset, yOffset, duration=num_seconds)  # 向指定方向拖动鼠标
 ```
 ## 弹出提示框相关API
 ```python
@@ -66,7 +74,7 @@ pyautogui.prompt('This lets the user type in a string and press OK.') #输入框
 
 ## 紧急中断功能
 
-介于本库是用于控制鼠标和键盘操作的，所以当程序卡死或者运行错误，中断程序就会变得有些困难。因此该库会默认开启安全功能。当需要紧急退出时，只需要将鼠标移动到屏幕的右上角，因此你需要做的就是，在鼠标被控制的前提下，疯狂将鼠标向左上角移动即可，这也给了程序设计者一点提示，就是在设计鼠标动作的时候，特别是在循环里的鼠标动作，不要将时序填充得过满，不然会导致程序无法中断的尴尬情况。程序中默认每个动作执行的间隔是0.1秒，可以使用PAUSE参数调整，避免执行过快导致一些问题。
+介于本库是用于控制鼠标和键盘操作的，所以当程序卡死或者运行错误，中断程序就会变得有些困难。因此该库会默认开启安全功能。当需要紧急退出时，只需要将鼠标移动到屏幕的左上角，因此你需要做的就是，在鼠标被控制的前提下，疯狂将鼠标向左上角移动即可，这也给了程序设计者一点提示，就是在设计鼠标动作的时候，特别是在循环里的鼠标动作，不要将时序填充得过满，不然会导致程序无法中断的尴尬情况。程序中默认每个动作执行的间隔是0.1秒，可以使用PAUSE参数调整，避免执行过快导致一些问题。
 
 ```python
 pyautogui.FAILSAFE = True 

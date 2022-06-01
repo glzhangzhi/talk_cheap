@@ -107,9 +107,7 @@ with keyboard.Listener(
     listener.join()
 
 # ...or, in a non-blocking fuction:
-listener = keyboard.Listener(
-#    on_press=on_press,
-#    on_release=on_release)
-#listener.start()
+listener = keyboard.Listener(on_press=on_press, on_release=on_release)
+listener.start()
 ```
 
