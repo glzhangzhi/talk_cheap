@@ -8,10 +8,11 @@ t2 = time.asctime(time.localtime(time.time())) #直接获取可读格式的时�
 time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 #自定义时间格式输出
 #年-月-日 时-分-秒
-time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()) 星期简称 月份简称 日 时:分:秒 年
+time.strftime("%a %b %d %H:%M:%S %Y", time.localtime()) 
+#星期简称 月份简称 日 时:分:秒 年
 a = "Sat Mar 28 22:24:24 2016"
-print time.mktime(time.strptime(a,"%a %b %d %H:%M:%S %Y")) 将某个日期转化为时间戳
-cal = calendar.month(2016, 1) 获取某月月历
+print time.mktime(time.strptime(a,"%a %b %d %H:%M:%S %Y")) # 将某个日期转化为时间戳
+cal = calendar.month(2016, 1) #获取某月月历
 ```
 
 # 时间格式符
