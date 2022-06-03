@@ -127,7 +127,7 @@ def initdb(drop):
 上面有两个新的知识点
 
 1. 使用`@app.cli.command()`将某个函数名注册为命令行的命令，例如上面这个函数，只需要命令行运行`flask initdb`或`flask initdb --drop`
-2. 这里的click是一个python第三方库，专注于提升python的命令行使用体验，目前这是仅有的一个适用于flask的命令行工具
+2. 这里的click是一个python库，已经被python官方收编，专注于提升python的命令行使用体验，目前这是仅有的一个适用于flask的命令行工具
 3. 使用click.option()来创建一个参数解析器，其工作方式与argparse差不多
 
 # 数据库的创建，读取，更新，删除
