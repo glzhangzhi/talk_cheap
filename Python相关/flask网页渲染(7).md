@@ -205,3 +205,111 @@ def delete(movie_id):
 login_manager.login_view = 'login'
 ```
 
+同样对于编辑视图函数也要加上这个装饰器
+
+```
+@app.route('/movie/edit/<int:movie_id>', methods=['GET', 'POST'])
+@login_required
+def edit(movie_id):
+    # ...
+```
+
+但对于创建新条目的操作有些不同，目前index这个视图函数同时管理GET方法显示主页以及POST方法提交表单后的新条目添加，我们仅需要对POST方法验证权限，所以不应该在整个视图函数前加上权限修饰函数，而是应该在post方法后加入权限验证。
+
+```
+from flask_login import login_required, current_user
+
+# ...
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        if not current_user.is_authenticated:  # 如果当前用户未认证
+            return redirect(url_for('index'))  # 重定向到主页
+        # ...
+```
+
+最后，添加一个设置页面，支持用户修改自己的名字
+
+```
+from flask_login import login_required, current_user
+
+# ...
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        name = request.form['name']
+
+        if not name or len(name) > 20:
+            flash('Invalid input.')
+            return redirect(url_for('settings'))
+
+        current_user.name = name
+        # current_user 会返回当前登录用户的数据库记录对象
+        # 等同于下面的用法
+        # user = User.query.first()
+        # user.name = name
+        db.session.commit()
+        flash('Settings updated.')
+        return redirect(url_for('index'))
+
+    return render_template('settings.html')
+```
+
+以及对应的模板setting.html
+
+```
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Settings</h3>
+<form method="post">
+    Your Name <input type="text" name="name" autocomplete="off" required value="{{ current_user.name }}">
+    <input class="btn" type="submit" name="submit" value="Save">
+</form>
+{% endblock %}
+```
+
+# 模板内容保护
+
+另一类认证保护是页面内容保护，即页面上的一些元素不能对未认证的用户开发，比如创建新条目的表单，编辑按钮，删除按钮等。这些元素都位于index页面中。
+
+以创建新条目表单为例，我们只需要在表单外面添加一个条件判断
+
+```
+<!-- 在模板中可以直接使用 current_user 变量 -->
+{% if current_user.is_authenticated %}
+<form method="post">
+    Name <input type="text" name="title" autocomplete="off" required>
+    Year <input type="text" name="year" autocomplete="off" required>
+    <input class="btn" type="submit" name="submit" value="Add">
+</form>
+{% endif %}
+```
+
+这样如果这个用户认证的条件判断不满足，则不会渲染内部的表单元素。类似的还有编辑和擅长按钮。
+
+```
+{% if current_user.is_authenticated %}
+    <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
+    <form class="inline-form" method="post" action="{{ url_for('.delete', movie_id=movie.id) }}">
+        <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
+    </form>
+{% endif %}
+```
+
+还有基模板中的导航栏，如果用户已经登陆，则会显示出设置和登出链接，否则显示登陆链接
+
+```
+{% if current_user.is_authenticated %}
+    <li><a href="{{ url_for('settings') }}">Settings</a></li>
+    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+{% else %}
+    <li><a href="{{ url_for('login') }}">Login</a></li>
+{% endif %}
+```
+
+
+
