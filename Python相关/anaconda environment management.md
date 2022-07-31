@@ -27,6 +27,7 @@ conda install conda-forge::numpy
 conda install numpy==3.1.5
 conda install "numpy[version='3.1.2|3.1.4']"
 conda install "numpy>2,5,<3.2"
+conda install --file requirements.txt
 conda config --add channels CHANNELNAME
 
 conda clean -all
