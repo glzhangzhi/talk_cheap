@@ -1,6 +1,8 @@
 [TOC]
 
-# 基本窗口
+# 基本要素
+
+## 基本窗口
 
 ```python
 import sys
@@ -16,7 +18,7 @@ if __name__ == '__main__':
     sys.exit(app.exec())  # sys.exit（）方法确保一个干净的退出
 ```
 
-# 面向对象编写并设置图标
+## 面向对象编写并设置图标
 
 ```python
 import sys
@@ -44,7 +46,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 增加关闭按钮
+## 增加关闭按钮
 
 ```python
 import sys
@@ -82,7 +84,7 @@ if __name__ == '__main__':
 
 ```
 
-# 猜数字小程序
+## 猜数字小程序
 
 ```python
 import sys
@@ -162,7 +164,9 @@ if __name__ == '__main__':
 
 ```
 
-# 事件与信号处理
+# 事件与信号
+
+## 事件与信号处理
 
 当调用`exec_()`方法后，应用程序进入主循环，主循环获取事件并将其发送到对象。
 
@@ -284,7 +288,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 获取事件发送者
+## 获取事件发送者
 
 ```python
 import sys
@@ -347,7 +351,9 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 发出自定义信号
+# 布局
+
+## 发出自定义信号
 
 ```python
 import sys
@@ -382,7 +388,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 绝对定位
+## 绝对定位
 
 ```python
 import sys
@@ -412,7 +418,7 @@ if __name__ == '__main__':
     app.exit(app.exec_())
 ```
 
-# 箱式布局
+## 箱式布局
 
 ```python
 import sys
@@ -457,7 +463,7 @@ if __name__ == '__main__':
     app.exit(app.exec_())
 ```
 
-# 网格布局
+## 网格布局
 
 ```python
 import sys
@@ -510,7 +516,7 @@ if __name__ == '__main__':
     app.exit(app.exec_())
 ```
 
-# 表单布局
+## 表单布局
 
 ```python
 from os import name
@@ -542,7 +548,9 @@ if __name__ == '__main__':
     app.exit(app.exec_())
 ```
 
-# 状态栏和菜单栏
+# 窗口视图
+
+## 状态栏和菜单栏
 
 ```python
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp
@@ -575,7 +583,7 @@ if __name__ == '__main__':
     ex = Example()
     sys.exit(app.exec_())
 ```
-# 上下文菜单
+## 上下文菜单
 
 ```python
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp, QMenu
@@ -650,7 +658,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 工具栏
+## 工具栏
 
 ```python
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, qApp, QMenu
@@ -712,7 +720,9 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 标准输入对话框
+# 组件
+
+## 标准输入对话框
 
 ```python
 from PyQt5.QtWidgets import (QApplication, QWidget, QPushButton, QLabel, QInputDialog, QTextBrowser)
@@ -802,7 +812,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 字体，颜色和打开文件对话框
+## 字体，颜色和打开文件对话框
 
 ```python
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QColorDialog, QFontDialog, QTextEdit, QFileDialog
@@ -859,7 +869,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 保存文件和打印
+## 保存文件和打印
 
 ```python
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QTextEdit, QFileDialog, QDialog
@@ -933,7 +943,7 @@ if __name__ == '__main__':
     sys.exit(app.exec_())
 ```
 
-# 各种消息对话框
+## 各种消息对话框
 
 ```python
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QMessageBox, QLabel, QCheckBox
@@ -1064,7 +1074,7 @@ if __name__ == '__main__':
 
 ```
 
-# 自定义对话框
+## 自定义对话框
 
 ```python
 from PyQt5.QtWidgets import QDialog, QApplication, QLineEdit, QLabel, QPushButton, QHBoxLayout, QVBoxLayout, QMessageBox
@@ -1137,7 +1147,7 @@ class PasswdDialog(QDialog):
         self.done(0)  # 结束对话框返回0
 ```
 
-# 进度条对话框
+## 进度条对话框
 
 ```python
 import sys
@@ -1206,7 +1216,7 @@ if __name__ == '__main__':
 
 ```
 
-# 单选/复选框
+## 单选/复选框
 
 ```python
 from PyQt5.QtWidgets import QWidget, QCheckBox, QApplication, QPushButton, QMessageBox
@@ -1292,7 +1302,7 @@ if __name__ == '__main__':
 
 ```
 
-# 单选按钮
+## 单选按钮
 
 ```python
 from PyQt5.QtWidgets import QWidget, QRadioButton, QApplication, QPushButton, QMessageBox, QButtonGroup
@@ -1378,7 +1388,7 @@ if __name__ == '__main__':
     pass
 ```
 
-# 普通按钮
+## 普通按钮
 
 ```python
 class Example(QWidget):
@@ -1422,7 +1432,7 @@ class Example(QWidget):
             self.count = 10
 ```
 
-# 工具按钮
+## 工具按钮
 
 ```python
 class Example(QWidget):
@@ -1481,7 +1491,7 @@ class Example(QWidget):
             QDesktopServices.openUrl(QUrl('https://www.mastercard.com.cn/zh-cn.html'))
 ```
 
-# 抽象按钮
+## 抽象按钮
 
 ```python
 # 上述按钮，都继承了QAbstractButton的父类，拥有很多共同的方法
@@ -1554,7 +1564,7 @@ class Example(QWidget):
             QMessageBox.information(self,'提示','恭喜，密码正确，可以进入！')
 ```
 
-# 滑块
+## 滑块
 
 ```python
 from PyQt5.QtWidgets import QWidget, QApplication, QSlider, QLabel
@@ -1619,7 +1629,7 @@ if __name__ == '__main__':
     #常规代码省略...
 ```
 
-# 进度条
+## 进度条
 
 ```python
 from PyQt5.QtWidgets import QWidget, QApplication, QProgressBar, QPushButton, QMessageBox
@@ -1694,7 +1704,7 @@ if __name__ == '__main__':
     #常规代码省略...
 ```
 
-# 数值调整框
+## 数值调整框
 
 ```python
 class HolyShitBox(QSpinBox):
