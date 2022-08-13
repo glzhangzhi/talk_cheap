@@ -3,10 +3,10 @@ https://maicss.gitbook.io/pyqt-chinese-tutoral/pyqt5/kong-jian-2
 '''
 
 import sys
-from email.charset import QP
 
 from PyQt5 import QtGui
-from PyQt5.QtCore import QCoreApplication, QObject, Qt, pyqtSignal, QBasicTimer
+from PyQt5.QtCore import QBasicTimer, QCoreApplication, QObject, Qt, pyqtSignal
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QFileDialog,
                              QGridLayout, QInputDialog, QLabel, QLCDNumber,
                              QMainWindow, QMenu, QMessageBox, QProgressBar,
@@ -74,6 +74,11 @@ class Example(QMainWindow):
         self.timer = QBasicTimer()
         self.step = 0
         
+        # 显示图片
+        pixmal = QPixmap('map.jpg')
+        pixmal = pixmal.scaled(1000, 1000, Qt.KeepAspectRatio)
+        lbl = QLabel(self)
+        lbl.setPixmap(pixmal)
         
         # 布局
         layout = QGridLayout()
@@ -89,6 +94,7 @@ class Example(QMainWindow):
         layout.addWidget(btn5, 2, 2)
         layout.addWidget(self.pbar, 3, 0, 1, 2)
         layout.addWidget(self.btn6, 3, 2)
+        layout.addWidget(lbl, 4, 0, 2, 3)
         
         widget = QWidget()
         widget.setLayout(layout)
@@ -196,6 +202,7 @@ class Example(QMainWindow):
         self.statusbar.showMessage(str(value))
     
     def doAction(self):
+        """根据计时器不同的状态来更改按钮的文本"""
         print(self.timer.isActive(), self.step)
         if self.timer.isActive():
             self.timer.stop()
@@ -206,6 +213,7 @@ class Example(QMainWindow):
             self.btn6.setText('Stop')
     
     def timerEvent(self, a0) -> None:
+        """进度条更新"""
         if self.step >= 100:
             self.timer.stop()
             self.btn6.setText('restart')
