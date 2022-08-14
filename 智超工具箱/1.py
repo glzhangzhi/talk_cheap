@@ -2,6 +2,7 @@
 https://maicss.gitbook.io/pyqt-chinese-tutoral/pyqt5/kong-jian-2
 '''
 
+import random
 import sys
 
 from PyQt5 import QtGui
@@ -292,6 +293,20 @@ class Example(QMainWindow):
     #     self.btn6.move(position)
     #     a0.setDropAction(Qt.MoveAction)
     #     a0.accept()
+    
+    def paintEvent(self, a0: QtGui.QPaintEvent) -> None:
+        qp = QPainter()
+        qp.begin(self)
+        self.drawPoints(qp)
+        qp.end()
+        
+    def drawPoints(self, qp):
+        qp.setPen(Qt.red)
+        size = self.size()
+        for i in range(1000):
+            x = random.randint(1, size.width() - 1)
+            y = random.randint(1, size.height() - 1)
+            qp.drawPoint(x, y)
 
     
 if __name__ == '__main__':
