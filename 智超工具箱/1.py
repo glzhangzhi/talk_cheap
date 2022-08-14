@@ -5,17 +5,46 @@ https://maicss.gitbook.io/pyqt-chinese-tutoral/pyqt5/kong-jian-2
 import sys
 
 from PyQt5 import QtGui
-from PyQt5.QtCore import QBasicTimer, QCoreApplication, QObject, Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QFileDialog,
-                             QGridLayout, QInputDialog, QLabel, QLCDNumber,
-                             QMainWindow, QMenu, QMessageBox, QProgressBar,
-                             QPushButton, QSlider, QWidget, qApp)
+from PyQt5.QtCore import (QBasicTimer, QCoreApplication, QMimeData, QObject,
+                          Qt, pyqtSignal)
+from PyQt5.QtGui import QDrag, QImage, QPixmap, QPainter, QColor, QFont
+from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
+                             QFileDialog, QGridLayout, QInputDialog, QLabel,
+                             QLCDNumber, QLineEdit, QMainWindow, QMenu,
+                             QMessageBox, QProgressBar, QPushButton, QSlider,
+                             QWidget, qApp)
 
 
 # 自定义一个信号
 class Communicate(QObject):
     closeApp = pyqtSignal()
+    
+# 自定义一个可拖拽按钮
+class DragButton(QPushButton):
+    
+    def __init__(self, title, parent):
+        super().__init__(title, parent)
+        self.setAcceptDrops(True)
+    
+    def dragEnterEvent(self, e):
+        if e.mimeData().hasFormat('text/plain'):
+            e.accept()
+        else:
+            e.ignore()
+    
+    def dropEvent(self, e):
+        self.setText(e.mimeData().text())
+
+class DragButton2(QPushButton):
+    
+    def mouseMoveEvent(self, e: QtGui.QMouseEvent) -> None:
+        if e.button() != Qt.RightButton:
+            return
+        mimeData = QMimeData()
+        drag = QDrag(self)
+        drag.setMimeData(mimeData)
+        drag.setHotSpot(e.pos - self.rect().topLeft())
+        dragAction = drag.exec_(Qt.MoveAction)
 
 class Example(QMainWindow):
 
@@ -50,6 +79,8 @@ class Example(QMainWindow):
         btn5 = QPushButton('切换绿', self)
         btn5.setCheckable(True)
         btn5.clicked[bool].connect(self.setColor)
+        # self.btn6 = QPushButton('拖我', self)
+        # self.btn6.move(0, 400)
         
         # LCD数字显示
         lcd = QLCDNumber(self)
@@ -74,11 +105,29 @@ class Example(QMainWindow):
         self.timer = QBasicTimer()
         self.step = 0
         
+        # 单行文本输入框
+        self.lbl = QLabel(self)
+        qle = QLineEdit(self)
+        qle.textChanged[str].connect(self.onChanged)
+        
         # 显示图片
         pixmal = QPixmap('map.jpg')
-        pixmal = pixmal.scaled(1000, 1000, Qt.KeepAspectRatio)
+        pixmal = pixmal.scaled(200, 200, Qt.KeepAspectRatio)
         lbl = QLabel(self)
         lbl.setPixmap(pixmal)
+        
+        # 下拉框
+        combo = QComboBox(self)
+        combo.addItem('a')
+        combo.addItem('b')
+        combo.addItem('c')
+        combo.addItem('d')
+        combo.activated[str].connect(self.onActivated)
+        
+        # 可接受拖动文本按钮
+        edit = QLineEdit('', self)
+        edit.setDragEnabled(True)
+        button = DragButton('Button', self)
         
         # 布局
         layout = QGridLayout()
@@ -95,6 +144,11 @@ class Example(QMainWindow):
         layout.addWidget(self.pbar, 3, 0, 1, 2)
         layout.addWidget(self.btn6, 3, 2)
         layout.addWidget(lbl, 4, 0, 2, 3)
+        layout.addWidget(qle, 6, 0, 1, 2)
+        layout.addWidget(self.lbl, 6, 2)
+        layout.addWidget(combo, 7, 0)
+        layout.addWidget(edit, 7, 1)
+        layout.addWidget(button, 7, 2)
         
         widget = QWidget()
         widget.setLayout(layout)
@@ -121,6 +175,7 @@ class Example(QMainWindow):
         self.toolbar.addAction(act1)
 
         # 窗口
+        self.setAcceptDrops(True)
         self.setMouseTracking(True)
         self.setGeometry(300, 300, 300, 220)
         self.setWindowTitle('智超工具箱')        
@@ -220,6 +275,24 @@ class Example(QMainWindow):
             return
         self.step += 1
         self.pbar.setValue(self.step)
+    
+    def onChanged(self, text):
+        """使用输入框的文本动态更细label文本"""
+        self.lbl.setText(text)
+        self.lbl.adjustSize()  # lbl会根据内容的多少，动态调节整体窗口的大小
+    
+    def onActivated(self, text):
+        self.statusbar.showMessage(text)
+        
+    # def dragEnterEvent(self, a0: QtGui.QDragEnterEvent) -> None:
+    #     a0.accept()
+    
+    # def dropEvent(self, a0: QtGui.QDropEvent) -> None:
+    #     position = a0.pos()
+    #     self.btn6.move(position)
+    #     a0.setDropAction(Qt.MoveAction)
+    #     a0.accept()
+
     
 if __name__ == '__main__':
 
