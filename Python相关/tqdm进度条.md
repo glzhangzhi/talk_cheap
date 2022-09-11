@@ -8,13 +8,15 @@ https://github.com/tqdm/tqdm#usage
 
  # 1.基于迭代器的
 ```python
-from tqdm import tqdm
+from tqdm import tqdm, trange
 import time
 
 text = ''
 for char in tqdm(['a', 'b', 'c', 'd']):
 	time.sleep(0.25)
 	text = text + char
+for i in trange(1, 100):
+    print(i)
 ```
 或者可以使用trange(i)代替tqdm(range(i))
 ```python
