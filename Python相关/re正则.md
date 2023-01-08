@@ -1,5 +1,5 @@
 直接上语法规则
-![来自CSDN](/home/zhichao/桌面/1240)
+
 python中自带了re库，以支持正则表达式的使用
 ```python
 import re
