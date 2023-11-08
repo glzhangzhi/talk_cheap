@@ -1,12 +1,11 @@
 import json
-import pickle
 import random
 
 import requests
 from lxml import etree
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from tqdm import tqdm
+import pickle
 
 
 def GetHTML(url):
@@ -58,17 +57,100 @@ def GetHTML(url):
 
 
 def GetHTML_with_Se(url):
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome("D:/Github")
     driver.get(url)
     # elem = driver.find_element_by_xpath('...')
     # elem[0].click()
-    return driver
+
+star_names = [
+    ['三上悠亜', 'okq', 7],
+    ['沖田杏梨', '71h', 6],
+    ['波多野結衣', '2jv', 61],
+    ['松下紗栄子', 'opq', 4],
+    ['水嶋あずみ', '29o', 7],
+    ['吉沢明歩', '2eg', 19],
+    ['楓カレン', 'u4m', 3],
+    ['赤井美月', '8ed', 3]
+]
+
+for star_name, code, pages in star_names:
+
+    url1 = [f"https://www.javbus.com/star/{code}"]
+    url2 = [f"https://www.javbus.com/star/{code}/{i}" for i in range(1, pages)]
+
+    urls = []
+    urls.extend(url1)
+    urls.extend(url2)
 
 
-url = 'https://www.javbus.com/SSIS-716'
+    list_videos = []
+    for url in urls:
+        html = GetHTML(url)
+        video = html.xpath('//*[@id="waterfall"]/div/a/@href')
+        list_videos.extend(video)
 
-driver = GetHTML_with_Se(url)
+    flag_type = False
+    dic2 = {}
+    for video in tqdm(list_videos):
+        html = GetHTML(video)
+        name = html.xpath("/html/body/div[5]/h3/text()")[0]
+        ps = html.xpath('/html/body/div[5]/div[1]/div[@class="col-md-3 info"]/p')
+        dic1 = {}
+        for i in range(1, len(ps) + 1):
+            parent_text = html.xpath(f"/html/body/div[5]/div[1]/div[2]/p[{i}]/text()")[0]
+            try:
+                parent_class = html.xpath(f"/html/body/div[5]/div[1]/div[2]/p[{i}]/@class")[
+                    0
+                ]
+            except IndexError:
+                parent_class = ""
+                pass
+            if parent_text == "類別:":
+                flag_type = True
+                continue
+            elif parent_class == "star-show":
+                text = "演員:"
+                actress_list = html.xpath(
+                    f'/html/body/div[5]/div[1]/div[2]/p[{len(ps)}]/span[@class="genre"]/a/text()'
+                )
+                content = actress_list
+                text = text.replace(":", "")
+                text = text.replace(" ", "")
+                dic1[text] = content
+                break
+            else:
+                if flag_type is False:
+                    text = html.xpath(
+                        f'/html/body/div[5]/div[1]/div[2]/p[{i}]/span[@class="header"]/text()'
+                    )[0]
+                    if text in ["識別碼:"]:
+                        content = html.xpath(
+                            f"/html/body/div[5]/div[1]/div[2]/p[{i}]/span[2]/text()"
+                        )[0]
+                    elif text in ["發行日期:", "長度:"]:
+                        content = html.xpath(
+                            f"/html/body/div[5]/div[1]/div[2]/p[{i}]/text()"
+                        )[0]
+                    elif text in ["導演:", "製作商:", "發行商:", "系列:"]:
+                        content = html.xpath(
+                            f"/html/body/div[5]/div[1]/div[2]/p[{i}]/a/text()"
+                        )[0]
+                    else:
+                        print(f"ERROR: {text}")
+                        break
+                else:
+                    tag_list = html.xpath(
+                        f'/html/body/div[5]/div[1]/div[2]/p[{i}]/span[@class="genre"]/label/a/text()'
+                    )
+                    text = "類別:"
+                    content = tag_list
+                    flag_type = False
+            # 这里以后还可以加上磁力链接的抓取、保存以及使用aris2解析和下载，但是由于德国的法律你懂的，所以这一块对我来说就暂时没用了
+            # 以后买了国内服务器，再考虑把这部分加上
+            text = text.replace(":", "")
+            text = text.replace(" ", "")
+            dic1[text] = content
+        dic2[name] = dic1
 
-elems = driver.find_elements(By.XPATH, '//*[@id="magnet-table"]/tr/td[1]/a[1]')
-for elem in elems:
-    print(elem.get_attribute('href'))
+    with open(f"C:/Users/Administrator/Desktop/{star_name}.pkl", "wb") as f:
+        pickle.dump(dic2, f)
