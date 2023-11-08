@@ -33,7 +33,7 @@ mouse.scroll(0, 2)
 ```python
 from pynput import mouse
 
-def no_move(x, y):
+def on_move(x, y):
     print(f'pointer move to {(x, y)}')
 
 def on_click(x, y, button, pressed):
