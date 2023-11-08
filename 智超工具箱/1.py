@@ -5,20 +5,32 @@ https://maicss.gitbook.io/pyqt-chinese-tutoral/pyqt5/kong-jian-2
 import random
 import sys
 
-from PyQt5 import QtGui
-from PyQt5.QtCore import (QBasicTimer, QCoreApplication, QMimeData, QObject,
-                          Qt, pyqtSignal)
-from PyQt5.QtGui import QDrag, QImage, QPixmap, QPainter, QColor, QFont
-from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
-                             QFileDialog, QGridLayout, QInputDialog, QLabel,
-                             QLCDNumber, QLineEdit, QMainWindow, QMenu,
-                             QMessageBox, QProgressBar, QPushButton, QSlider,
-                             QWidget, qApp)
+from PySide6 import QtGui
+from PySide6.QtCore import QBasicTimer, QCoreApplication, QMimeData, QObject, Qt, Signal
+from PySide6.QtGui import QAction, QColor, QDrag, QFont, QImage, QPainter, QPixmap
+from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QComboBox,
+    QFileDialog,
+    QGridLayout,
+    QInputDialog,
+    QLabel,
+    QLCDNumber,
+    QLineEdit,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QProgressBar,
+    QPushButton,
+    QSlider,
+    QWidget,
+)
 
 
 # 自定义一个信号
 class Communicate(QObject):
-    closeApp = pyqtSignal()
+    closeApp = Signal()
     
 # 自定义一个可拖拽按钮
 class DragButton(QPushButton):
@@ -112,7 +124,7 @@ class Example(QMainWindow):
         qle.textChanged[str].connect(self.onChanged)
         
         # 显示图片
-        pixmal = QPixmap('map.jpg')
+        pixmal = QPixmap('./map.jpg')
         pixmal = pixmal.scaled(200, 200, Qt.KeepAspectRatio)
         lbl = QLabel(self)
         lbl.setPixmap(pixmal)
@@ -123,7 +135,7 @@ class Example(QMainWindow):
         combo.addItem('b')
         combo.addItem('c')
         combo.addItem('d')
-        combo.activated[str].connect(self.onActivated)
+        combo.activated[int].connect(self.onActivated)
         
         # 可接受拖动文本按钮
         edit = QLineEdit('', self)
@@ -196,7 +208,7 @@ class Example(QMainWindow):
         action = cmenu.exec_(self.mapToGlobal(event.pos()))
         
         if action == act_quit:
-            qApp.quit()
+            QApplication.quit()
 
     def closeEvent(self, event):
         '''关闭窗口事件'''
@@ -238,7 +250,7 @@ class Example(QMainWindow):
         fname = QFileDialog.getOpenFileName(self, '打开文件', '.')
         if fname[0]:
             self.statusbar.showMessage(fname[0])
-     
+
     def changeTitle(self, state):
         '''根据单选框更改标题状态'''
         # state: 0 未勾选 1 部分勾选 2 勾选
@@ -283,7 +295,7 @@ class Example(QMainWindow):
         self.lbl.adjustSize()  # lbl会根据内容的多少，动态调节整体窗口的大小
     
     def onActivated(self, text):
-        self.statusbar.showMessage(text)
+        self.statusbar.showMessage(str(text), 0)
         
     # def dragEnterEvent(self, a0: QtGui.QDragEnterEvent) -> None:
     #     a0.accept()
@@ -313,4 +325,4 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
     ex = Example()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
